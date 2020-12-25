@@ -48,8 +48,8 @@ class Photo{
   }) ;
   factory Photo.fromJson(Map<String, dynamic> json){
     return new Photo(
-      id: json['id'].toString(),
-      title: json['title'],
+      id: json['user']['name'],
+      title: json['alt_description'],
       url: json['urls']['small'],
     );
   }
@@ -98,7 +98,18 @@ class _MyAppState extends State<MyApp> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: GestureDetector(
-                            child: Image.network(snapshot.data.photos[position].url),
+                            child: Row(
+                                children: [Container(
+                                  margin: EdgeInsets.only(right: 10.0),
+                                    child: Image.network(snapshot.data.photos[position].url, height: 100)),
+                                  Expanded(child:
+                                    Column(children: [Text(snapshot.data.photos[position].title ?? 'Without name',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                      overflow: TextOverflow.ellipsis,),
+                                      Text(snapshot.data.photos[position].id)]
+                                  ))
+                                ],
+                            ),
                     onTap: (){
                               print(position);
                               Navigator.push(context, MaterialPageRoute(builder: (context) => Image.network(snapshot.data.photos[position].url)),
